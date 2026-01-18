@@ -17,7 +17,6 @@ export async function fetchFeed(feedURL: string): Promise<RSSFeed> {
 	const parser = new XMLParser();
 	const parsed = parser.parse(xml);
 
-	// Validate channel
 	const channel = parsed?.rss?.channel;
 	if (!channel) {
 		throw new Error("Invalid RSS feed: missing channel");
@@ -33,7 +32,6 @@ export async function fetchFeed(feedURL: string): Promise<RSSFeed> {
 		throw new Error("Invalid RSS feed: missing channel metadata");
 	}
 
-	// Normalize items
 	let rawItems: any[] = [];
 
 	if (Array.isArray(channel.item)) {
@@ -53,7 +51,6 @@ export async function fetchFeed(feedURL: string): Promise<RSSFeed> {
 			typeof description !== "string" ||
 			typeof pubDate !== "string"
 		) {
-			// Skip invalid items
 			continue;
 		}
 
