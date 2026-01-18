@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
@@ -8,4 +9,26 @@ export const users = pgTable("users", {
 		.defaultNow()
 		.$onUpdate(() => new Date()),
 	name: text("name").notNull().unique(),
+});
+
+export const feeds = pgTable("feeds", {
+	id: uuid("id").defaultRandom().primaryKey(),
+
+	createdAt: timestamp("created_at")
+		.notNull()
+		.default(sql`now()`),
+
+	updatedAt: timestamp("updated_at")
+		.notNull()
+		.default(sql`now()`),
+
+	name: text("name").notNull(),
+
+	url: text("url").notNull().unique(),
+
+	userId: uuid("user_id")
+		.notNull()
+		.references(() => users.id, {
+			onDelete: "cascade",
+		}),
 });
