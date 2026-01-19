@@ -8,8 +8,8 @@ export const handlerLogin: CommandHandler = async (cmdName, ...args) => {
 	}
 
 	const username = args[0];
-
 	const user = await getUser(username);
+
 	if (!user) {
 		throw new Error(`User "${username}" does not exist`);
 	}
