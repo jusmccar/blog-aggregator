@@ -2,7 +2,7 @@ import { getUser } from "src/lib/db/queries/users";
 import { CommandHandler } from "./commands";
 import { setUser } from "./config";
 
-export const handlerLogin: CommandHandler = async (cmdName, ...args) => {
+export const handlerLogin: CommandHandler = async (_, ...args) => {
 	if (args.length === 0) {
 		throw new Error("login command requires a username");
 	}

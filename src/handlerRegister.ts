@@ -2,7 +2,7 @@ import { createUser, getUser } from "src/lib/db/queries/users";
 import { CommandHandler } from "./commands";
 import { setUser } from "./config";
 
-export const handlerRegister: CommandHandler = async (cmdName, ...args) => {
+export const handlerRegister: CommandHandler = async (_, ...args) => {
 	const name = args[0];
 
 	if (!name) {
