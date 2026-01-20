@@ -1,5 +1,6 @@
 import { CommandHandler } from "./commands";
 import { getNextFeedToFetch, markFeedFetched } from "./lib/db/queries/feeds";
+import { createPost } from "./lib/db/queries/posts";
 import { fetchFeed } from "./lib/rss/fetchFeed";
 
 function parseDuration(durationStr: string): number {
@@ -29,7 +30,10 @@ function parseDuration(durationStr: string): number {
 
 async function scrapeFeeds() {
 	const feed = await getNextFeedToFetch();
-	if (!feed) return;
+
+	if (!feed) {
+		return;
+	}
 
 	console.log(`Fetching feed: ${feed.url}`);
 
@@ -38,7 +42,21 @@ async function scrapeFeeds() {
 	const rss = await fetchFeed(feed.url);
 
 	for (const item of rss.items) {
-		console.log(`- ${item.title}`);
+		const publishedAt = item.pubDate
+			? new Date(item.pubDate)
+			: null;
+
+		if (publishedAt && isNaN(publishedAt.getTime())) {
+			continue;
+		}
+
+		await createPost({
+			title: item.title,
+			url: item.link,
+			description: item.description,
+			publishedAt,
+			feedId: feed.id,
+		});
 	}
 }
 

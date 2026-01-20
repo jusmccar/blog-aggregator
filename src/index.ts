@@ -1,6 +1,7 @@
 import { CommandsRegistry, registerCommand, runCommand } from "./commands";
 import { handlerAddFeed } from "./handlerAddFeed";
 import { handlerAgg } from "./handlerAgg";
+import { handlerBrowse } from "./handlerBrowse";
 import { handlerFeeds } from "./handlerFeeds";
 import { handlerFollow } from "./handlerFollow";
 import { handlerFollowing } from "./handlerFollowing";
@@ -24,6 +25,7 @@ async function main() {
 	registerCommand(registry, "follow", middlewareLoggedIn(handlerFollow));
 	registerCommand(registry, "unfollow", middlewareLoggedIn(handlerUnfollow));
 	registerCommand(registry, "following", middlewareLoggedIn(handlerFollowing));
+	registerCommand(registry, "browse", middlewareLoggedIn(handlerBrowse));
 
 	const args = process.argv.slice(2);
 
@@ -42,6 +44,7 @@ async function main() {
 		} else {
 			console.error("Unknown error");
 		}
+
 		process.exit(1);
 	}
 
